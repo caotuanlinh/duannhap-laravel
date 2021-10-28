@@ -20,10 +20,10 @@ class UserSeeder extends Seeder
         
         DB::table('users')->insert(
         [
-            'name' => 'tuannnlinhhh',
+            'name' => 'linhhh',
             'email'=>'tuannnlinhhh@gmail.com',
             'password'=>bcrypt(123456),
-            'phone_number' => "531548524"
+            'phone' => "531548524"
         ],
     );
     }

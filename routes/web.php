@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ResetpassController;
+use App\Http\Controllers\ResgisterController;
 use App\Http\Controllers\RoomsController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\UserController;
@@ -72,9 +73,8 @@ Route::any('logout', function () {
 })->name('logout');
 Route::get('reset', [ResetpassController::class, 'reset'])->name('reset');
 Route::post('reset', [ResetpassController::class, 'SaveReset']);
-Route::prefix('customer')->group(function () {
-       Route::get('login', );
-});
+Route::get('register', [ResgisterController::class,'getRegis'])->name('register');
+Route::post('register', [ResgisterController::class,'postRegis']);
 
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;

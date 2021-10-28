@@ -22,6 +22,15 @@
                 @enderror
             </div>
         </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label for="">Price</label>
+                <input type="text" name="price" class="form-control" value="{{old('price')}}">
+                @error('price')
+                <div style="color: red;">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
         <div class="text-right">
             <button type="submit" class="btn btn-primary">Lưu</button>           
         </div>

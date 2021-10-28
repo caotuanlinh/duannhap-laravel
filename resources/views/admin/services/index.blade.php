@@ -7,7 +7,9 @@
       <th scope="col">#</th>
       <th scope="col">ID</th>
       <th scope="col">Tên dịch vụ</th>
+      <th scope="col">Giá</th>
       <th scope="col">Chức năng</th>
+      
     </tr>
   </thead>
   <tbody>
@@ -16,7 +18,7 @@
       <td>{{$loop->iteration}}</td>
       <td>{{$p->id}}</td>
       <td>{{$p->name}}</td>
-
+      <td>{{$p->price}}</td>
       <td>
       <a href="{{route('servi.edit', ['id' => $p->id])}}" class="btn btn-info">Sửa</a>
       <a href="{{route('servi.remove', ['id' => $p->id])}}" class="btn btn-danger">Xóa</a>

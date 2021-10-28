@@ -9,7 +9,7 @@ class Services extends Model
     use HasFactory;
     protected $table = 'flights_services';
     public $fillable = [
-        'name', 'icon'
+        'name', 'icon','price'
     ];
     public function rooms(){
         return $this->belongsToMany(Services::class,'flights_room_services','servi_id','room_id');

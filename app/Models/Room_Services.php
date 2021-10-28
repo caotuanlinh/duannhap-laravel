@@ -10,7 +10,7 @@ class Room_Services extends Model
     use HasFactory;
     protected $table = 'flights_room_services';
     public $fillable = [
-        'room_id', 'servi_id'
+        'room_id', 'servi_id','additional_price','topping_id'
     ];
 
 }

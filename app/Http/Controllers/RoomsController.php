@@ -6,21 +6,23 @@ use App\Http\Requests\RoomFormRequest;
 use App\Models\Room;
 use App\Models\Room_Services;
 use App\Models\Services;
+use App\Models\Topping;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 
 class RoomsController extends Controller
 {
-    public function index(Request $request){
-        
+    public function index(Request $request)
+    {
+
         $searchData = $request->except('page');
         $room = Room::paginate(3);
-        $productQuery = Room::where('room_no', 'like', "%" .$request->keyword . "%");
+        $productQuery = Room::where('room_no', 'like', "%" . $request->keyword . "%");
         $room = $productQuery->paginate(3)->appends($request->except('page'));
         // if (($request->keyword)!= "") {
         //     $room = Room::where("room_no","like","%".$request->keyword . "%")->get();
-            
+
         // } else {
         //     $room = Room::paginate(3);
         // }
@@ -32,15 +34,16 @@ class RoomsController extends Controller
         // }
 
 
-        
-                      
+
+
         return view('admin.rooms.index', compact('room'));
     }
-    public function remove($id){
+    public function remove($id)
+    {
         // Room::destroy($id);
         $room = Room::find($id);
-        $linh = 'storage/'.$room->image;
-       
+        $linh = 'storage/' . $room->image;
+
         $room->service()->detach();
         if (file_exists($linh)) {
             unlink($linh);
@@ -49,23 +52,25 @@ class RoomsController extends Controller
 
         return redirect()->back();
     }
-    public function editForm($id){
+    public function editForm($id)
+    {
         $room = Room::find($id);
-        if(!$room){
+        if (!$room) {
             return redirect()->back();
         }
         $service = Services::all();
         $room_servi = DB::table('flights_room_services')->where('room_id', $id)->pluck('servi_id')->toArray();
-        return view('admin.rooms.edit-form', compact('room', 'service','room_servi'));
+        return view('admin.rooms.edit-form', compact('room', 'service', 'room_servi'));
     }
-    public function saveEdit($id, RoomFormRequest $request){
-        $room = Room::find($id); 
-        if(!$room){
+    public function saveEdit($id, RoomFormRequest $request)
+    {
+        $room = Room::find($id);
+        if (!$room) {
             return redirect()->back();
         }
-       
+
         // upload ảnh
-        if($request->hasFile('uploadfile')){
+        if ($request->hasFile('uploadfile')) {
             $path = $request->file('uploadfile')->storeAs('public/uploads/rooms', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
             $room->image = str_replace('public/', '', $path);
             // $room->image = $request->file('uploadfile')->storeAs('uploads/rooms', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
@@ -75,42 +80,60 @@ class RoomsController extends Controller
         $room->save();
         return redirect(route('room.index'));
     }
-    public function addForm(){
+    public function addForm()
+    {
         $service = Services::all();
-        return view('admin.rooms.add-form', compact('service'));
+        $topping = Topping::all();
+        return view('admin.rooms.add-form', compact('service','topping'));
     }
 
 
-    public function saveAdd(Request $request){
+    public function saveAdd(Request $request)
+    {
         // dd($request->all());
         $request->validate(
             [
-                'uploadfile'=>'required'
+                'uploadfile' => 'required'
             ],
             [
-                'uploadfile.required'=>'Hãy chọn ảnh sản phẩm '
+                'uploadfile.required' => 'Hãy chọn ảnh sản phẩm '
             ]
         );
         // $room = new Room(); 
         // $room->fill($request->all());
         // upload ảnh
-        if($request->hasFile('uploadfile')){
-            $path = $request->file('uploadfile')->storeAs('public/uploads/rooms', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
-            $image = str_replace('public/', '', $path);          
+        if ($request->hasFile('uploadfile')) {
+            $path = $request->file('uploadfile')->storeAs('public/uploads/rooms',  $request->uploadfile->getClientOriginalName());
+            $image = str_replace('public/', '', $path);
         }
         $room = Room::create([
             'room_no' => $request->room_no,
-            'image'=> $image,
-            'floor'=> $request->floor,
-            'price'=>$request->price,
-            'detail'=>$request->detail
+            'image' => $image,
+            'floor' => $request->floor,
+            'price' => $request->price,
+            'detail' => $request->detail
         ]);
+        // $room->topping()->attach(
+        //     $request->topping_id
+        // );
+        
+        // $room->service([
+        //      'additional_price' => $request->additional_price
+        // ]);
+        //  dd($_POST['topping_id']->name);
         foreach($request->servi_id as $value){
+           foreach($request->topping_id as $values){
             Room_Services::create([
                 'room_id' => $room->id,
-                'servi_id'=>$value
+                'servi_id'=>$value,
+                'additional_price'=> $request->additional_price,
+                'topping_id' =>  $values
             ]);
+           }
         }
+        // $room->topping()->attach(
+        //     $request->topping_id
+        // );
 
         return redirect(route('room.index'));
     }

@@ -19,6 +19,12 @@
                 @endforeach
             </div>
             <div class="form-group">
+                <label for="">topping</label> <br>
+                @foreach($topping as $c)
+                <input type="checkbox" name="topping_id[]" value="{{$c->id}}"  > {{$c->name}}<br>
+                @endforeach
+            </div>
+            <div class="form-group">
                 <label for="">Tầng</label>
                 <input type="text" name="floor" class="form-control" value="{{old('floor')}}">
                 @error('floor')
@@ -31,6 +37,10 @@
                 @error('price')
                 <div style="color: red;">{{ $message }}</div>
                 @enderror
+            </div>
+            <div class="form-group">
+                <label for="">Giá thêm</label>
+                <input type="text" name="additional_price" class="form-control" value="{{old('additional_price')}}">
             </div>
 
         </div>

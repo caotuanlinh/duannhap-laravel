@@ -18,6 +18,7 @@
       <th scope="col">#</th>
       <th scope="col">Số phòng</th>
       <th scope="col">Dịch vụ</th>
+      <th scope="col">Giá thêm</th>
       <th scope="col">Floor</th>
       <th scope="col">Image</th>
       <th scope="col">Price</th>
@@ -32,7 +33,12 @@
       <td>{{$p->room_no}}</td>
       <td>
         @foreach($p->service as $c)
-        {{$c->name}}
+        -{{$c->name}} <br>
+        @endforeach
+      </td>
+      <td>
+        @foreach($p->topping as $c)
+        -{{$c->name}} <br>
         @endforeach
       </td>
       <td>{{$p->floor}}</td>

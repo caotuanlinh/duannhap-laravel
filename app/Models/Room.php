@@ -16,4 +16,7 @@ class Room extends Model
     public function service(){
         return $this->belongsToMany(Services::class,'flights_room_services','room_id', 'servi_id');
     }
+    public function topping(){
+        return $this->belongsToMany(Topping::class,'flights_room_services','room_id', 'topping_id');
+    }
 }
